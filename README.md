@@ -1,3 +1,5 @@
 # My Portfolio
 
-This repository contains projects I worked on in the past.
+This repository contains Data Science projects I worked on in the past in one location.
+
+
