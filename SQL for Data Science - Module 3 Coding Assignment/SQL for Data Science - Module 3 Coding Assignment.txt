@@ -1,0 +1,713 @@
+
+
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+This is a 2-part assignment. In the first part, you are asked a series of questions that will help you profile and understand the data just like a data scientist would. For this first part of the assignment, you will be assessed both on the correctness of your findings, as well as the code you used to arrive at your answer. You will be graded on how easy your code is to read, so remember to use proper formatting and comments where necessary.
+
+In the second part of the assignment, you are asked to come up with your own inferences and analysis of the data for a particular research question you want to answer. You will be required to prepare the dataset for the analysis you choose to do. As with the first part, you will be graded, in part, on how easy your code is to read, so use proper formatting and comments to illustrate and communicate your intent as required.
+
+For both parts of this assignment, use this "worksheet." It provides all the questions you are being asked, and your job will be to transfer your answers and SQL coding where indicated into this worksheet so that your peers can review your work. You should be able to use any Text Editor (Windows Notepad, Apple TextEdit, Notepad ++, Sublime Text, etc.) to copy and paste your answers. If you are going to use Word or some other page layout application, just be careful to make sure your answers and code are lined appropriately.
+In this case, you may want to save as a PDF to ensure your formatting remains intact for you reviewer.
+
+
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000
+vii. hours table = 10000
+viii. photo table = 10000
+ix. review table = 10000
+x. tip table = 10000
+xi. user table = 10000
+	
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = 10000
+ii. Hours = 1562
+iii. Category = 2643
+iv. Attribute = 1115
+v. Review = 8090 (business_id)
+vi. Checkin = 493
+vii. Photo = 6493
+viii. Tip = 3979 (business_id)
+ix. User = 10000
+x. Friend = 11
+xi. Elite_years = 2780
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer:
+	
+	
+	SQL code used to arrive at answer:
+	
+SELECT
+name
+FROM user
+WHERE id is NULL 
+  OR name is NULL 
+  OR review_count is NULL
+  OR yelping_since is NULL
+  OR useful is NULL
+  OR funny is NULL
+  OR cool is NULL
+  OR fans is NULL
+  OR average_stars is NULL
+  OR compliment_hot is NULL
+  OR compliment_more is NULL
+  OR compliment_profile is NULL
+  OR compliment_cute is NULL
+  OR compliment_list is NULL
+  OR compliment_note is NULL
+  OR compliment_plain is NULL
+  OR compliment_cool is NULL
+  OR compliment_funny is NULL
+  OR compliment_writer is NULL
+  OR compliment_photos is NULL
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min: 1		max: 5		avg: 3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min: 1.0	max: 5.0	avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min: 0		max: 2		avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min: 1		max: 53		avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min: 0		max: 2000	avg: 24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+SELECT
+city,
+SUM(review_count) AS review_count_sum
+FROM business
+GROUP BY city
+ORDER BY review_count_sum DESC
+	
+	Copy and Paste the Result Below:
+	
+
++-----------------+------------------+
+| city            | review_count_sum |
++-----------------+------------------+
+| Las Vegas       |            82854 |
+| Phoenix         |            34503 |
+| Toronto         |            24113 |
+| Scottsdale      |            20614 |
+| Charlotte       |            12523 |
+| Henderson       |            10871 |
+| Tempe           |            10504 |
+| Pittsburgh      |             9798 |
+| Montréal        |             9448 |
+| Chandler        |             8112 |
+| Mesa            |             6875 |
+| Gilbert         |             6380 |
+| Cleveland       |             5593 |
+| Madison         |             5265 |
+| Glendale        |             4406 |
+| Mississauga     |             3814 |
+| Edinburgh       |             2792 |
+| Peoria          |             2624 |
+| North Las Vegas |             2438 |
+| Markham         |             2352 |
+| Champaign       |             2029 |
+| Stuttgart       |             1849 |
+| Surprise        |             1520 |
+| Lakewood        |             1465 |
+| Goodyear        |             1155 |
++-----------------+------------------+
+(Output limit exceeded, 25 of 362 total rows shown)
+
+
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+SELECT
+stars,
+COUNT(stars) AS star_count
+FROM business
+WHERE city = 'Avon'
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+
++-------+------------+
+| stars | star_count |
++-------+------------+
+|   4.0 |         10 |
++-------+------------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+
+SELECT
+stars,
+COUNT(stars) AS star_count
+FROM business
+WHERE city = 'Beachwood'
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+		
++-------+------------+
+| stars | star_count |
++-------+------------+
+|   5.0 |         14 |
++-------+------------+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+
+SELECT
+name,
+SUM(review_count) AS review_total
+FROM user
+GROUP BY name
+ORDER BY review_total DESC
+LIMIT 3		
+	Copy and Paste the Result Below:
+		
++--------+--------------+
+| name   | review_total |
++--------+--------------+
+| Nicole |         2397 |
+| Sara   |         2253 |
+| Gerald |         2034 |
++--------+--------------+
+
+8. Does posing more reviews correlate with more fans?
+
+	Please explain your findings and interpretation of the results:
+	
+SELECT
+name,
+SUM(review_count) AS review_total,
+SUM(fans) AS fans_total
+FROM user
+GROUP BY name
+ORDER BY review_total DESC
+
+
+
++-----------+--------------+------------+
+| name      | review_total | fans_total |
++-----------+--------------+------------+
+| Nicole    |         2397 |        200 |
+| Sara      |         2253 |         72 |
+| Gerald    |         2034 |        256 |
+| Lisa      |         2021 |        207 |
+| Mark      |         1945 |        156 |
+| Jennifer  |         1862 |         86 |
+| Jen       |         1744 |        148 |
+| Michelle  |         1737 |        133 |
+| Melissa   |         1678 |        104 |
+| William   |         1639 |        142 |
+| Karen     |         1625 |        123 |
+| Justin    |         1572 |         78 |
+| Rachel    |         1519 |         79 |
+| Daniel    |         1441 |         75 |
+| Sarah     |         1436 |        100 |
+| Chris     |         1419 |         52 |
+| Jeff      |         1410 |         45 |
+| Mike      |         1400 |        119 |
+| Yuri      |         1341 |         76 |
+| Dan       |         1333 |         44 |
+| Christine |         1309 |        187 |
+| John      |         1264 |         46 |
+| Jessica   |         1248 |        116 |
+| .Hon      |         1246 |        101 |
+| Matt      |         1239 |         62 |
++-----------+--------------+------------+
+(Output limit exceeded, 25 of 3454 total rows shown)
+
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer:
+
+	
+	SQL code used to arrive at answer:
+
+SELECT
+
+COUNT(CASE 
+  WHEN text LIKE '%love%' THEN 1
+END) AS love_count,
+
+COUNT(CASE 
+  WHEN text LIKE '%hate%' THEN 1
+END) AS hate_count
+
+FROM review	
+
+
++------------+------------+
+| love_count | hate_count |
++------------+------------+
+|       1780 |        232 |
++------------+------------+
+
+
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+
+SELECT
+name,
+SUM(fans) AS fans_total
+FROM user
+GROUP BY name
+ORDER BY fans_total DESC
+LIMIT 10
+	
+	Copy and Paste the Result Below:
+
++-----------+------------+
+| name      | fans_total |
++-----------+------------+
+| Amy       |        519 |
+| Mimi      |        498 |
+| Harald    |        311 |
+| Gerald    |        256 |
+| Lisa      |        207 |
+| Nicole    |        200 |
+| Christine |        187 |
+| Mark      |        156 |
+| Jen       |        148 |
+| Linda     |        148 |
++-----------+------------+
+	
+11. Is there a strong relationship (or correlation) between having a high number of fans and being listed as "useful" or "funny?" Out of the top 10 users with the highest number of fans, what percent are also listed as “useful” or “funny”?
+
+Key:
+0% - 25% - Low relationship
+26% - 75% - Medium relationship
+76% - 100% - Strong relationship
+	
+	SQL code used to arrive at answer:
+
+SELECT
+name,
+SUM(fans) AS fans_total,
+useful,
+funny
+FROM user
+GROUP BY name
+ORDER BY fans_total DESC
+LIMIT 10
+	
+	Copy and Paste the Result Below:
+
++-----------+------------+--------+-------+
+| name      | fans_total | useful | funny |
++-----------+------------+--------+-------+
+| Amy       |        519 |      0 |     0 |
+| Mimi      |        498 |      1 |     1 |
+| Harald    |        311 |      0 |     0 |
+| Gerald    |        256 |  17524 |  2324 |
+| Lisa      |        207 |      0 |     0 |
+| Nicole    |        200 |      0 |     0 |
+| Christine |        187 |      1 |     0 |
+| Mark      |        156 |      0 |     0 |
+| Jen       |        148 |     22 |     0 |
+| Linda     |        148 |      0 |     0 |
++-----------+------------+--------+-------+
+
+	
+	Please explain your findings and interpretation of the results:
+	
+	
+	
+
+Part 2: Inferences and Analysis
+
+1.	Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+
+
+
++------------------------+------------+------------+
+| SUBSTR((hours), 8, 11) | stars_4to5 | stars_2to3 |
++------------------------+------------+------------+
+| 10:00-20:00            |          1 |          0 |
+| 10:00-22:00            |          0 |          0 |
+| 10:00-23:00            |          1 |          0 |
+| 10:30-0:00             |          0 |          0 |
+| 10:30-21:00            |          0 |          1 |
+| 10:30-22:00            |          1 |          0 |
+| 11:00-0:00             |          0 |          2 |
+| 11:00-18:00            |          1 |          0 |
+| 11:00-1:00             |          0 |          1 |
+| 11:00-20:00            |          2 |          0 |
+| 11:00-21:00            |          0 |          0 |
+| 11:00-22:00            |          2 |          0 |
+| 11:00-23:00            |          1 |          1 |
+| 11:00-2:00             |          1 |          1 |
+| 11:00-2:30             |          0 |          2 |
+| 11:00-3:00             |          0 |          1 |
+| 11:30-0:00             |          0 |          1 |
+| 11:30-21:00            |          1 |          0 |
+| 12:00-22:00            |          0 |          1 |
+| 12:00-22:30            |          1 |          0 |
+| 12:00-23:00            |          0 |          1 |
+| 16:00-22:00            |          1 |          0 |
+| 17:30-22:00            |          0 |          0 |
+| 18:00-23:00            |          1 |          0 |
+| 18:00-2:00             |          1 |          0 |
++------------------------+------------+------------+
+(Output limit exceeded, 25 of 242 total rows shown)
+
+
+I don’t see different distributions when it comes to hours.
+
+
+
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+
+
++------------+--------------+
+| stars      | review_count |
++------------+--------------+
+| Other      |            3 |
+| stars_2to3 |           10 |
+| stars_4to5 |          105 |
++------------+--------------+
+
+Yes, the group with star ratings from 4 to 5 have significantly more reviews.
+
+
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
++------------+-----------------+------------------+
+| stars      | AverageLatitude | AverageLongitude |
++------------+-----------------+------------------+
+| Other      |   41.9735722222 |   -77.5535494444 |
+| stars_2to3 |   41.2060791667 |   -78.8494358333 |
+| stars_4to5 |   39.7532758621 |   -90.6476134483 |
++------------+-----------------+------------------+
+
+
+The data set above has the average latitude and longitude for businesses that are categorized by star ratings.
+
+
+Business with star ratings from 2 to 3 had an average location that was near the western and southern part of New York state.
+
+Business with star ratings from 4 to 5 had an average location that was near the western part of Illinois state.
+
+
+
+
+SQL code used for analysis:
+
+
+Distributions of Hours
+SELECT
+
+SUBSTR((hours), 8, 11),
+
+COUNT(CASE 
+  WHEN business.stars >= 4 THEN 1
+END) AS stars_4to5,
+
+COUNT(CASE 
+  WHEN business.stars <= 3 AND business.stars >= 2 THEN 1
+END) AS stars_2to3
+
+FROM ((business INNER JOIN hours ON business.id = hours.business_id)
+  INNER JOIN category ON business.id = category.business_id)
+
+WHERE category.category = 'Restaurants'
+
+GROUP BY hours.hours
+
+
+
+Different Numbers of Reviews
+SELECT
+
+CASE 
+  WHEN business.stars >= 4 THEN "stars_4to5"
+  WHEN business.stars <= 3 AND business.stars >= 2 THEN "stars_2to3"
+  ELSE "Other"
+END AS stars,
+
+business.review_count
+
+FROM business INNER JOIN category ON business.id = category.business_id
+
+WHERE category.category = 'Restaurants'
+
+GROUP BY stars
+
+
+
+
+Location Analysis
+SELECT
+
+CASE 
+  WHEN business.stars >= 4 THEN "stars_4to5"
+  WHEN business.stars <= 3 AND business.stars >= 2 THEN "stars_2to3"
+  ELSE "Other"
+END AS stars,
+
+AVG(business.latitude) as AverageLatitude,
+AVG(business.longitude) as AverageLongitude
+
+FROM business INNER JOIN category ON business.id = category.business_id
+
+WHERE category.category = 'Restaurants'
+
+GROUP BY stars
+
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+
+
++---------+------------+------------+
+| is_open | stars_4to5 | stars_1to3 |
++---------+------------+------------+
+|       0 |        653 |        572 |
+|       1 |       4355 |       2642 |
++---------+------------+------------+
+
+
+According to the data set above, 13% of businesses with star ratings that are 4 to 5 are closed. Also, 17.8% of businesses with star ratings that are 1 to 3 are closed. This predictably suggests that businesses with low ratings on the Yelp website are typically at a higher risk of closing at some point in the near future.
+
+         
+ii. Difference 2:
+         
+
++------------------------+---------------+-----------------+
+| category               | open_business | closed_business |
++------------------------+---------------+-----------------+
+| Restaurants            |            53 |              18 |
+| Shopping               |            25 |               5 |
+| Food                   |            20 |               3 |
+| Nightlife              |            12 |               8 |
+| Bars                   |            11 |               6 |
+| Health & Medical       |            16 |               1 |
+| Home Services          |            15 |               1 |
+| Beauty & Spas          |            12 |               1 |
+| Local Services         |            10 |               2 |
+| American (Traditional) |             8 |               3 |
++------------------------+---------------+-----------------+
+
+
+In the data set above, the number of business by business category and whether those business are open are closed is displayed. It shows that certain business categories as dramatically higher percentage of closed businesses compared to others. Here are a few stats based on the data above:
+•	40% of business in the nightlife category are closed
+•	35% of bars are closed
+•	25.4 of restaurants are closed
+•	17% of shopping centers are closed
+
+
+    
+SQL code used for analysis:
+
+
+stars_4to5 vs stars_1to3:
+
+SELECT
+
+business.is_open,
+
+COUNT(CASE 
+  WHEN business.stars >= 4 THEN 1
+END) AS stars_4to5,
+
+COUNT(CASE 
+  WHEN business.stars <= 3 THEN 1
+END) AS stars_1to3
+
+FROM business
+
+GROUP BY business.is_open
+
+
+
+Count of Businesses Open and Closed by Business Category:
+SELECT
+
+category.category,
+
+COUNT(CASE 
+  WHEN business.is_open = '1' THEN 1
+END) AS open_business,
+
+COUNT(CASE 
+  WHEN business.is_open = '0' THEN 1
+END) AS closed_business
+
+
+FROM business INNER JOIN category ON business.id = category.business_id
+
+GROUP BY category.category
+ORDER BY COUNT(category.category) DESC
+LIMIT 10
+
+
+
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+         
+I chose to write queries that would generate data sets that I could use for categorizing business categories into broader business categories.
+
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+
+I think it would be interesting to cluster and categorize the 257 business categories into broader business categories to help make more sense of the data. For example, categories such as Restaurants, Burgers, Fast Food, Burgers, etc. could go into a broader category related to food. Categorizing in this manner could make it much easier to explain data insights to upper management within a company who want to understand the “big picture.”
+
+
+I would create two data sets. The first data set would have categories, average star ratings and business name counts. I would use the information in that data set to categorize the categories into broader categories. Obviously it helps if I can view all of the categories, which can’t be done on the Coursera webpage where I’m running the scripts. The second data set would have categories, state, city, average star ratings, and business name count. In actuality, I would add a new column containing broader category names and drop the existing categories column. I would use this type of data set and variants similar to it to mine for insights relating to differences of star ratings when considering broader categories, states, cities, etc.
+
+
+
+                  
+iii. Output of your finished dataset:
+         
+
++---------------------------+---------------+-------------------+
+| category                  | AvgStarRating | BusinessNameCount |
++---------------------------+---------------+-------------------+
+| Restaurants               | 3.45774647887 |                71 |
+| Shopping                  | 3.98333333333 |                30 |
+| Food                      | 3.78260869565 |                23 |
+| Nightlife                 |         3.475 |                20 |
+| Bars                      |           3.5 |                17 |
+| Health & Medical          | 4.08823529412 |                17 |
+| Home Services             |           4.0 |                16 |
+| Beauty & Spas             | 3.88461538462 |                13 |
+| Local Services            | 4.20833333333 |                12 |
+| American (Traditional)    | 3.81818181818 |                11 |
+| Active Life               |          4.15 |                10 |
+| Automotive                |           4.5 |                 9 |
+| Hotels & Travel           | 3.22222222222 |                 9 |
+| Burgers                   |         3.125 |                 8 |
+| Sandwiches                |        3.9375 |                 8 |
+| Arts & Entertainment      |           4.0 |                 7 |
+| Fast Food                 | 3.21428571429 |                 7 |
+| Mexican                   |           3.5 |                 7 |
+| American (New)            | 3.33333333333 |                 6 |
+| Event Planning & Services |          3.75 |                 6 |
+| Hair Salons               | 4.08333333333 |                 6 |
+| Bakeries                  |           4.1 |                 5 |
+| Doctors                   |           4.2 |                 5 |
+| Indian                    |           3.6 |                 5 |
+| Japanese                  |           3.8 |                 5 |
++---------------------------+---------------+-------------------+
+(Output limit exceeded, 25 of 257 total rows shown)
+
+
+
++------------------------+-------+-------------+---------------+-------------------+
+| category               | state | city        | AvgStarRating | BusinessNameCount |
++------------------------+-------+-------------+---------------+-------------------+
+| Restaurants            | ON    | Toronto     |           3.4 |                10 |
+| Restaurants            | AZ    | Phoenix     |           3.5 |                 6 |
+| Bars                   | ON    | Toronto     |         3.625 |                 4 |
+| Food                   | AZ    | Phoenix     |         3.625 |                 4 |
+| Food                   | ON    | Toronto     |         3.625 |                 4 |
+| Health & Medical       | NV    | Las Vegas   |           4.5 |                 4 |
+| Home Services          | AZ    | Phoenix     |          2.75 |                 4 |
+| Nightlife              | ON    | Toronto     |         3.625 |                 4 |
+| Restaurants            | NV    | Las Vegas   |         3.875 |                 4 |
+| Restaurants            | ON    | Mississauga |           3.5 |                 4 |
+| Shopping               | AZ    | Chandler    |           4.5 |                 4 |
+| Shopping               | NV    | Las Vegas   |         3.875 |                 4 |
+| Shopping               | ON    | Toronto     |         4.375 |                 4 |
+| Active Life            | ON    | Toronto     | 3.83333333333 |                 3 |
+| American (Traditional) | AZ    | Phoenix     | 3.83333333333 |                 3 |
+| Beauty & Spas          | ON    | Toronto     | 4.33333333333 |                 3 |
+| Food                   | OH    | Cleveland   | 4.16666666667 |                 3 |
+| Health & Medical       | AZ    | Phoenix     | 4.33333333333 |                 3 |
+| Japanese               | ON    | Toronto     |           3.5 |                 3 |
+| Pubs                   | ON    | Toronto     | 3.66666666667 |                 3 |
+| Restaurants            | EDH   | Edinburgh   |           3.5 |                 3 |
+| Shopping               | NC    | Charlotte   | 3.66666666667 |                 3 |
+| Sushi Bars             | ON    | Toronto     | 3.33333333333 |                 3 |
+| American (New)         | NV    | Las Vegas   |           3.5 |                 2 |
+| Auto Repair            | AZ    | Chandler    |          4.75 |                 2 |
++------------------------+-------+-------------+---------------+-------------------+
+(Output limit exceeded, 25 of 586 total rows shown)
+
+
+
+iv. Provide the SQL code you used to create your final dataset:
+
+Category, Average Star Rating, and Business Name Count:
+SELECT
+
+category.category,
+
+AVG(stars) as AvgStarRating,
+
+COUNT(business.name) as BusinessNameCount
+
+FROM business INNER JOIN category ON business.id = category.business_id
+GROUP BY category.category
+
+ORDER BY COUNT(business.name) DESC
+
+
+Category, State, City, Average Star Rating, and Business Name Count
+SELECT
+
+category.category,
+business.state,
+business.city,
+
+AVG(stars) as AvgStarRating,
+
+COUNT(business.name) as BusinessNameCount
+
+FROM business INNER JOIN category ON business.id = category.business_id
+GROUP BY category.category, business.city
+
+ORDER BY COUNT(business.name) DESC
