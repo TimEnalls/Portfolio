@@ -15,3 +15,5 @@ Here are the projects so far:
 **AirBnB Seattle Listings 2016** - Implemented a K-means clustering model using AirBnB property listing data to identify clusters with attributes most associated with the highest and lowest priced listings. Additionally, I published a blog post on Medium.com and created Tableau visualizations to disclose findings.
 
 **Predicting Customer Churn with PySpark** - Used PySpark to engineer relevant features and build machine learning models to predict churn with an imagined digital music service dataset; explained the project in a Medium.com post with CRISP-DM methodology.
+
+**Querying Data with Transact-SQL - Final Assessment** - This is the final assignment for the "Querying Data with Transact-SQL" class by EdX and Microsoft. I wrote SQL statements that included TOP, OFFSET, FETCH, CASE, JOIN, UNION, LEFT, ISNUMERIC, UPPER, CREATE TABLE, PIVOT, INSERT, UPDATE, etc.
